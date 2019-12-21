@@ -1,7 +1,10 @@
 package org.inspirerobotics.bcd.planner;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 /**
  * The first class called by the JVM -
@@ -14,6 +17,18 @@ public class Launcher extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void init() {
+        try {
+            FieldImage.load();
+        } catch(IOException e) {
+            System.out.println("Failed to load field image!");
+            e.printStackTrace();
+
+            Platform.exit();
+        }
     }
 
     @Override

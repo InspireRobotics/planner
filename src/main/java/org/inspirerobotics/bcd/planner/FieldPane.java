@@ -23,7 +23,7 @@ public class FieldPane extends Canvas{
 
         g.setFill(Color.GREEN);
         g.fillRoundRect(5, 5, getWidth() - 10, getHeight() - 10, 10, 10);
-        g.save();
+        g.drawImage(FieldImage.getImage(), 0, 0);
     }
 
     public AnchorPane wrap(){

@@ -15,6 +15,15 @@ javafx {
 }
 mainClassName = "$moduleName/org.inspirerobotics.bcd.planner.Launcher"
 
+sourceSets {
+    main {
+        //We need to do this because of java modules
+        //not working with gradle. Gradle places resources into a
+        //separate directory which means it cannot be loaded by the module
+        output.resourcesDir = java.outputDir
+    }
+}
+
 repositories {
     mavenCentral()
 }
