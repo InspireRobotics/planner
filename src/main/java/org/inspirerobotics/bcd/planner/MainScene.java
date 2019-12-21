@@ -18,7 +18,7 @@ public class MainScene {
         this.borderPane.setStyle("-fx-background-color:gray");
         this.borderPane.setPadding(new Insets(10));
         this.borderPane.setCenter(new FieldPane().wrap());
-        this.borderPane.setBottom(AnchorUtils.wrap(new Button("Test")));
+        this.borderPane.setBottom(GuiUtils.anchor(new Button("Test")));
 
         this.scene = new Scene(borderPane);
     }
