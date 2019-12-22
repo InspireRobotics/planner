@@ -1,8 +1,6 @@
 package org.inspirerobotics.bcd.planner;
 
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -11,16 +9,21 @@ import javafx.scene.layout.BorderPane;
 public class MainScene {
 
     private final BorderPane borderPane;
+    private final CurvePane curvePane;
     private final Scene scene;
 
-    public MainScene() {
+    public MainScene(Gui gui) {
         this.borderPane = new BorderPane();
-        this.borderPane.setStyle("-fx-background-color:gray");
-        this.borderPane.setPadding(new Insets(10));
-        this.borderPane.setCenter(new FieldPane().wrap());
-        this.borderPane.setBottom(GuiUtils.anchor(new Button("Test")));
+        this.curvePane = new CurvePane(gui);
+
+        this.borderPane.setCenter(new FieldPane(gui).wrap());
+        this.borderPane.setRight(curvePane);
 
         this.scene = new Scene(borderPane);
+    }
+
+    public CurvePane getCurvePane() {
+        return curvePane;
     }
 
     public Scene getScene() {

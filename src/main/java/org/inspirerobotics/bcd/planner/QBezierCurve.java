@@ -5,6 +5,9 @@ import javafx.scene.paint.Color;
 
 public class QBezierCurve {
 
+    private static int count = 0;
+
+    private final String name = "Curve" + (++count);
     private Color color = Color.RED;
     private Point2D start = new Point2D(0, 0);
     private Point2D end = new Point2D(0, 0);
@@ -36,5 +39,9 @@ public class QBezierCurve {
 
     public Color getColor() {
         return color;
+    }
+
+    public String getName() {
+        return name;
     }
 }

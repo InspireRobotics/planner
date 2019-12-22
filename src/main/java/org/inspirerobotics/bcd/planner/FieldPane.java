@@ -5,14 +5,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 
 /**
  * The Main component of the GUI - it draws the curves and the picture of the field
@@ -21,15 +20,13 @@ public class FieldPane extends Canvas{
 
     private static final int TRANSLATE_SPEED = 5;
     private final HashSet<KeyCode> keysDown = new LinkedHashSet<>();
-    private List<QBezierCurve> curves = new ArrayList<>();
+    private final Gui gui;
 
-    public FieldPane() {
-        draw();
-
-        addTestCurves();
+    public FieldPane(Gui gui) {
+        this.gui = gui;
 
         //Allows key events to trigger while not typing
-        this.setFocusTraversable(true);
+//        this.setFocusTraversable(true);
 
         this.widthProperty().addListener(e -> draw());
         this.heightProperty().addListener(e -> draw());
@@ -37,23 +34,13 @@ public class FieldPane extends Canvas{
         this.setOnScroll(this::onScroll);
         this.setOnKeyPressed(this::onKeyPressed);
         this.setOnKeyReleased(this::onKeyReleased);
+        this.setOnMouseClicked(this::onClick);
 
         GuiUtils.createTimer(this::animate).start();
     }
 
-    private void addTestCurves() {
-        QBezierCurve testCurve = new QBezierCurve();
-        testCurve.setStart(new Point2D(25, 100));
-        testCurve.setControlPoint(new Point2D(300, 75));
-        testCurve.setEnd(new Point2D(300, 400));
-
-        QBezierCurve testCurve2 = new QBezierCurve();
-        testCurve2.setStart(new Point2D(300, 400));
-        testCurve2.setControlPoint(new Point2D(300, 540));
-        testCurve2.setEnd(new Point2D(370, 570));
-
-        curves.add(testCurve);
-        curves.add(testCurve2);
+    private void onClick(MouseEvent mouseEvent) {
+        this.requestFocus();
     }
 
     private void animate(long time) {
@@ -103,7 +90,7 @@ public class FieldPane extends Canvas{
     }
 
     private void drawCurves(GraphicsContext g) {
-        curves.forEach(curve -> {
+        gui.getCurves().forEach(curve -> {
             drawCurve(g, curve);
             drawPoint(g, curve.getStart(), curve.getColor());
             drawPoint(g, curve.getControlPoint(), curve.getColor());
