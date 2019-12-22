@@ -31,6 +31,7 @@ public class Gui {
     private void initStageSettings(Stage stage) {
         stage.setTitle("BCD Planner");
         stage.setResizable(true);
+        stage.getIcons().add(Images.getIcon());
 
         stage.setWidth(800);
         stage.setHeight(500);

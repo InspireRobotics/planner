@@ -85,7 +85,7 @@ public class FieldPane extends Canvas{
         GraphicsContext g = getGraphicsContext2D();
         g.clearRect(-10000, -10000, 20000, 200000);
 
-        g.drawImage(FieldImage.getImage(), 0, 0);
+        g.drawImage(Images.getFieldImage(), 0, 0);
         drawCurves(g);
     }
 

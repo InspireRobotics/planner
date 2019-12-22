@@ -22,7 +22,7 @@ public class Launcher extends Application {
     @Override
     public void init() {
         try {
-            FieldImage.load();
+            Images.load();
         } catch(IOException e) {
             System.out.println("Failed to load field image!");
             e.printStackTrace();
