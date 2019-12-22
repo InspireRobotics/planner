@@ -44,9 +44,7 @@ public class CurvePane extends VBox {
         choices.setMaxWidth(Double.MAX_VALUE);
 
         this.setPadding(new Insets(10));
-        this.setMinWidth(300);
         this.setSpacing(20);
-        this.setStyle("-fx-background-color:gray");
         this.getChildren().add(choices);
 
         addCurveBoxes();
@@ -154,7 +152,7 @@ public class CurvePane extends VBox {
             return change;
         }
 
-        if (newText.matches("^[1-9]\\d*(\\.\\d+)?$") && currentCurve != null) {
+        if (newText.matches("^[0-9]\\d*(\\.\\d+)?$") && currentCurve != null) {
             return change;
         }
 
@@ -165,6 +163,10 @@ public class CurvePane extends VBox {
         while(c.next()){
             choices.getItems().removeAll(c.getRemoved());
             choices.getItems().addAll(c.getAddedSubList());
+        }
+
+        if(choices.getSelectionModel().isEmpty() && choices.getItems().size() > 0){
+            choices.getSelectionModel().select(0);
         }
     }
 }
