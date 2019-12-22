@@ -13,6 +13,10 @@ public class QBezierCurve {
     private Point2D end = new Point2D(0, 0);
     private Point2D controlPoint = new Point2D(0, 0);
 
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public void setControlPoint(Point2D controlPoint) {
         this.controlPoint = controlPoint;
     }

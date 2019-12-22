@@ -5,10 +5,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -30,6 +27,7 @@ public class CurvePane extends VBox {
     private TextField p1y;
     private TextField p2x;
     private TextField p2y;
+    private ColorPicker colorPicker;
 
     /**
      * When this is true, the curve is not updated with the
@@ -52,6 +50,16 @@ public class CurvePane extends VBox {
         this.getChildren().add(choices);
 
         addCurveBoxes();
+        createColorPicker();
+        syncCurveBoxes();
+    }
+
+    private void createColorPicker() {
+        colorPicker = new ColorPicker();
+        colorPicker.valueProperty().addListener(this::updateCurvesWithOptions);
+        colorPicker.setEditable(false);
+
+        this.getChildren().add(colorPicker);
     }
 
     private void onSelected(ActionEvent observable) {
@@ -69,9 +77,11 @@ public class CurvePane extends VBox {
             p1y.setText(Double.toString(currentCurve.getControlPoint().getY()));
             p2x.setText(Double.toString(currentCurve.getEnd().getX()));
             p2y.setText(Double.toString(currentCurve.getEnd().getY()));
+            colorPicker.setValue(currentCurve.getColor());
+            colorPicker.setEditable(true);
 
             updating = false;
-            updateCurvesWithTextValues(null);
+            updateCurvesWithOptions(null);
         }else{
             System.out.println("no curve");
             p0x.setText("");
@@ -80,6 +90,8 @@ public class CurvePane extends VBox {
             p1y.setText("");
             p2x.setText("");
             p2y.setText("");
+            colorPicker.setValue(Color.WHITE);
+            colorPicker.setEditable(false);
         }
     }
 
@@ -97,7 +109,7 @@ public class CurvePane extends VBox {
         Label label = new Label(name);
         label.setTextFill(Color.WHITE);
         TextField field = new TextField();
-        field.textProperty().addListener(this::updateCurvesWithTextValues);
+        field.textProperty().addListener(this::updateCurvesWithOptions);
 
         field.setTextFormatter(new TextFormatter<String>(this::formatNumberTextField));
         hBox.getChildren().addAll(label, field);
@@ -110,7 +122,7 @@ public class CurvePane extends VBox {
         return field;
     }
 
-    private void updateCurvesWithTextValues(Observable observable) {
+    private void updateCurvesWithOptions(Observable observable) {
         if(currentCurve == null || updating)
             return;
 
@@ -122,6 +134,8 @@ public class CurvePane extends VBox {
 
         if(!p2x.getText().isEmpty() && !p2y.getText().isEmpty())
             currentCurve.setEnd(new Point2D(parseTextField(p2x), parseTextField(p2y)));
+
+        currentCurve.setColor(colorPicker.getValue());
     }
 
     private double parseTextField(TextField field) {
