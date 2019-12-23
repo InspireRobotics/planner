@@ -5,8 +5,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -24,7 +24,7 @@ public class MainScene {
 
         SplitPane splitPane = new SplitPane();
 
-        ButtonBar buttonBar = createButtonBar();
+        ToolBar buttonBar = createButtonBar();
         CurvePane curvePane = new CurvePane(gui);
 
         VBox.setVgrow(curvePane, Priority.ALWAYS);
@@ -41,18 +41,26 @@ public class MainScene {
         this.scene = new Scene(splitPane);
     }
 
-    private ButtonBar createButtonBar() {
-        ButtonBar bar = new ButtonBar();
+    private ToolBar createButtonBar() {
+        ToolBar bar = new ToolBar();
         bar.setPadding(new Insets(5));
 
-        Button button = new Button("Add Curve");
-        button.setOnAction(this::addCurve);
-        bar.getButtons().addAll(button);
+        Button addCurve = new Button("Add Curve");
+        addCurve.setOnAction(this::addCurve);
+
+        Button startSimulation = new Button("Start Simulation");
+        startSimulation.setOnAction(this::startSimulation);
+
+        bar.getItems().addAll(addCurve, startSimulation);
 
         bar.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-        ButtonBar.setButtonData(button, ButtonBar.ButtonData.LEFT);
+//        ButtonBar.setButtonData(addCurve, ButtonBar.ButtonData.LEFT);
 
         return bar;
+    }
+
+    private void startSimulation(ActionEvent actionEvent) {
+        gui.getSimulation().start();
     }
 
     private void addCurve(ActionEvent actionEvent) {

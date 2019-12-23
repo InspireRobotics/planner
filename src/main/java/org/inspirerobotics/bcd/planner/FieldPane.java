@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -25,8 +26,6 @@ public class FieldPane extends Canvas{
     public FieldPane(Gui gui) {
         this.gui = gui;
 
-        //Allows key events to trigger while not typing
-//        this.setFocusTraversable(true);
 
         this.widthProperty().addListener(e -> draw());
         this.heightProperty().addListener(e -> draw());
@@ -87,6 +86,39 @@ public class FieldPane extends Canvas{
 
         g.drawImage(Images.getFieldImage(), 0, 0);
         drawCurves(g);
+
+        drawSimulation(g, gui.getSimulation());
+    }
+
+    private void drawSimulation(GraphicsContext g, Simulation simulation) {
+        if(!simulation.isRunning())
+            return;
+
+        drawPoint(g, simulation.getCurrentPoint(), Color.SPRINGGREEN);
+        drawSimulationInfo(g, simulation);
+    }
+
+
+    private void drawSimulationInfo(GraphicsContext g, Simulation simulation) {
+        g.save();
+
+        //Ignore current scale and transform because we want
+        //to keep this always in lower left hand corner
+        g.setTransform(1, 0, 0, 1, 0, 0);
+
+        String time = String.format("Time: %1.2f", simulation.getTime());
+
+        g.setFill(Color.BLACK);
+        g.fillRect(0, getHeight() - 62, 102, 60);
+        g.setFill(Color.LIGHTGRAY);
+        g.fillRect(0, getHeight() - 60, 100, 60);
+
+        g.setFill(Color.BLACK);
+        g.setFont(Font.font(18));
+        g.fillText(time, 5, getHeight() - 35);
+        g.fillText("Curve: " + simulation.getCurrentCurve(), 5, getHeight() - 15);
+
+        g.restore();
     }
 
     private void drawCurves(GraphicsContext g) {

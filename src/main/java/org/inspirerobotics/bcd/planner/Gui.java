@@ -14,11 +14,14 @@ public class Gui {
 
     private final Stage stage;
     private final MainScene scene;
+    private final Simulation simulation;
 
-    private ObservableList<QBezierCurve> curves = FXCollections.observableArrayList();
+    private ObservableList<QBezierCurve> curves;
 
     public Gui(Stage stage) {
         this.stage = stage;
+        this.curves = FXCollections.observableArrayList();
+        this.simulation = new Simulation(this);
         this.scene = new MainScene(this);
 
         initStageSettings(stage);
@@ -26,6 +29,8 @@ public class Gui {
 
         this.stage.setScene(scene.getScene());
         this.stage.show();
+
+        GuiUtils.createTimer(simulation::tick).start();
     }
 
     private void initStageSettings(Stage stage) {
@@ -54,6 +59,10 @@ public class Gui {
 
         curves.add(testCurve);
         curves.add(testCurve2);
+    }
+
+    public Simulation getSimulation() {
+        return simulation;
     }
 
     public ObservableList<QBezierCurve> getCurves() {
