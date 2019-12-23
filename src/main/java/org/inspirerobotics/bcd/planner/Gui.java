@@ -38,8 +38,8 @@ public class Gui {
         stage.setResizable(true);
         stage.getIcons().add(Images.getIcon());
 
-        stage.setWidth(800);
-        stage.setHeight(500);
+        stage.setWidth(900);
+        stage.setHeight(650);
     }
 
     public void stop() {

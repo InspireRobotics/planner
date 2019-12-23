@@ -26,6 +26,8 @@ public class FieldPane extends Canvas{
     public FieldPane(Gui gui) {
         this.gui = gui;
 
+        this.getGraphicsContext2D().scale(.75, .75);
+        this.setFocusTraversable(true);
 
         this.widthProperty().addListener(e -> draw());
         this.heightProperty().addListener(e -> draw());
@@ -88,6 +90,14 @@ public class FieldPane extends Canvas{
         drawCurves(g);
 
         drawSimulation(g, gui.getSimulation());
+        drawControls(g);
+    }
+
+    private void drawControls(GraphicsContext g) {
+        String helpText = "WASD To Move, Scroll to zoom";
+        g.setFill(Color.BLACK);
+        g.setFont(Font.font(18));
+        g.fillText(helpText, 10, Images.getFieldImage().getHeight() + 25);
     }
 
     private void drawSimulation(GraphicsContext g, Simulation simulation) {
