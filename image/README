@@ -1,0 +1,7 @@
+Thank you for using BCD Planner! To run it on Windows you can use the .bat file included in this directory.
+
+If you are having issues, you can run the launchScript file in /bin directory (Windows, Mac, Linux).
+
+To report bugs:
+1. File a github issue at https://github.com/InspireRobotics/planner
+2. email inspirerobotics4283@gmail.com

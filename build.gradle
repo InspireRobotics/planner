@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'org.openjfx.javafxplugin' version '0.0.8'
-    id 'org.beryx.jlink' version '2.12.0'
+    id 'org.beryx.jlink' version '2.17.0'
 }
 
 group 'org.inspirerobotics.bcd'
@@ -15,15 +15,6 @@ javafx {
 }
 mainClassName = "$moduleName/org.inspirerobotics.bcd.planner.Launcher"
 
-sourceSets {
-    main {
-        //We need to do this because of java modules
-        //not working with gradle. Gradle places resources into a
-        //separate directory which means it cannot be loaded by the module
-        output.resourcesDir = java.outputDir
-    }
-}
-
 repositories {
     mavenCentral()
 }
@@ -34,6 +25,18 @@ dependencies {
 
 jlink {
     launcher {
-        name = 'planner.main'
+        name="launchScript"
+    }
+}
+
+tasks.jlink.doLast{
+    copy {
+        from("/image/"){
+            include "", "/README", "/run.bat"
+        }
+        from("/"){
+            include "LICENSE"
+        }
+        into "$buildDir/image/"
     }
 }

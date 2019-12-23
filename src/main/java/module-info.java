@@ -1,4 +1,4 @@
-module planner.main {
+module org.inspirerobotics.bcd.planner {
     requires java.desktop;
     requires javafx.controls;
 
