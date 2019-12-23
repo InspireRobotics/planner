@@ -1,4 +1,4 @@
-package org.inspirerobotics.bcd.planner;
+package org.inspirerobotics.bcd.planner.ui;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -10,6 +10,9 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import org.inspirerobotics.bcd.planner.Images;
+import org.inspirerobotics.bcd.planner.QBezierCurve;
+import org.inspirerobotics.bcd.planner.Simulation;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;

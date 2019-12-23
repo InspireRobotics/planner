@@ -1,4 +1,4 @@
-package org.inspirerobotics.bcd.planner;
+package org.inspirerobotics.bcd.planner.ui;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;

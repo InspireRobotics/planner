@@ -3,6 +3,7 @@ package org.inspirerobotics.bcd.planner;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import org.inspirerobotics.bcd.planner.ui.Gui;
 
 import java.io.IOException;
 

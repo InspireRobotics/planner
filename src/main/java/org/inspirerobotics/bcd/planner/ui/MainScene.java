@@ -1,4 +1,4 @@
-package org.inspirerobotics.bcd.planner;
+package org.inspirerobotics.bcd.planner.ui;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -9,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.inspirerobotics.bcd.planner.QBezierCurve;
 
 /**
  * Contains all of the gui components for the planning scene

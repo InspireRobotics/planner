@@ -1,4 +1,4 @@
-package org.inspirerobotics.bcd.planner;
+package org.inspirerobotics.bcd.planner.ui;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -10,6 +10,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.inspirerobotics.bcd.planner.Images;
+import org.inspirerobotics.bcd.planner.Launcher;
 
 import java.awt.*;
 import java.io.IOException;

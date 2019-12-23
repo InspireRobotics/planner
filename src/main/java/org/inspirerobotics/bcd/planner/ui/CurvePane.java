@@ -1,4 +1,4 @@
-package org.inspirerobotics.bcd.planner;
+package org.inspirerobotics.bcd.planner.ui;
 
 import javafx.beans.Observable;
 import javafx.collections.ListChangeListener;
@@ -11,6 +11,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
+import org.inspirerobotics.bcd.planner.QBezierCurve;
 
 /**
  * The pane on the right side of the GUI that allows the

@@ -1,6 +1,7 @@
 package org.inspirerobotics.bcd.planner;
 
 import javafx.geometry.Point2D;
+import org.inspirerobotics.bcd.planner.ui.Gui;
 
 public class Simulation {
 

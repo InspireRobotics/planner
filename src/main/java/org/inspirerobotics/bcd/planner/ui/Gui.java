@@ -1,9 +1,13 @@
-package org.inspirerobotics.bcd.planner;
+package org.inspirerobotics.bcd.planner.ui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.stage.Stage;
+import org.inspirerobotics.bcd.planner.Images;
+import org.inspirerobotics.bcd.planner.Launcher;
+import org.inspirerobotics.bcd.planner.QBezierCurve;
+import org.inspirerobotics.bcd.planner.Simulation;
 
 /**
  * Main class for responsible for creating/handling the GUI
