@@ -13,6 +13,7 @@ import java.io.IOException;
  */
 public class Launcher extends Application {
 
+    public static final String VERSION = "0.1.0";
     private Gui gui;
 
     public static void main(String[] args) {

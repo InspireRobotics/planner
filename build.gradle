@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'org.inspirerobotics.bcd'
-version '0.1.0'
+version '0.1.0' //Make sure to update Launcher.java with version
 
 sourceCompatibility = 11
 

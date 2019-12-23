@@ -1,13 +1,12 @@
 package org.inspirerobotics.bcd.planner;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.geometry.NodeOrientation;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -22,6 +21,17 @@ public class MainScene {
     public MainScene(Gui gui) {
         this.gui = gui;
 
+        BorderPane borderPane = new BorderPane();
+        MenuBar menuBar = createMenuBar();
+        SplitPane splitPane = createCenterPane(gui);
+
+        borderPane.setTop(menuBar);
+        borderPane.setCenter(splitPane);
+
+        this.scene = new Scene(borderPane);
+    }
+
+    private SplitPane createCenterPane(Gui gui) {
         SplitPane splitPane = new SplitPane();
 
         ToolBar buttonBar = createButtonBar();
@@ -37,8 +47,21 @@ public class MainScene {
 
         splitPane.getItems().add(anchorPane);
         splitPane.getItems().add(vbox);
+        return splitPane;
+    }
 
-        this.scene = new Scene(splitPane);
+    private MenuBar createMenuBar() {
+        MenuBar menuBar = new MenuBar();
+        Menu optionsMenu = new Menu("Options");
+
+        MenuItem about = new MenuItem("About");
+        about.setOnAction(event-> new AboutWindow());
+        MenuItem quit = new MenuItem("Quit");
+        quit.setOnAction(event -> Platform.exit());
+
+        optionsMenu.getItems().addAll(about, quit);
+        menuBar.getMenus().add(optionsMenu);
+        return menuBar;
     }
 
     private ToolBar createButtonBar() {
@@ -52,9 +75,6 @@ public class MainScene {
         startSimulation.setOnAction(this::startSimulation);
 
         bar.getItems().addAll(addCurve, startSimulation);
-
-        bar.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-//        ButtonBar.setButtonData(addCurve, ButtonBar.ButtonData.LEFT);
 
         return bar;
     }

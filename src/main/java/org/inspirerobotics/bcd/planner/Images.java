@@ -12,10 +12,12 @@ public class Images {
 
     private static Image fieldImage;
     private static Image icon;
+    private static Image aboutLogo;
 
     public static void load() throws IOException {
         icon = load("/icon.png");
         fieldImage = load("/field.png");
+        aboutLogo = load("/about_logo.png");
     }
 
     private static Image load(String path) throws IOException{
@@ -34,5 +36,9 @@ public class Images {
 
     public static Image getIcon() {
         return icon;
+    }
+
+    public static Image getAboutLogo() {
+        return aboutLogo;
     }
 }

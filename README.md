@@ -1,7 +1,7 @@
 # BCD Planner
 BCD Planner is a program to generate Bezier curves for different FRC Games. 
 
-BCD (Bezier Curve Drive) is a new system for smooth autonomous robot drive.
+BCD stands for Bezier Curve Drive which is a new autonomous system of driving being developed. 
 It uses Bezier curves to generate smooth paths for the robot to follow. 
 
 For more info on BCD check [here][1]
