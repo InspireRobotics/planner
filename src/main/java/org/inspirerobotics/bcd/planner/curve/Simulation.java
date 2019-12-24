@@ -1,8 +1,13 @@
-package org.inspirerobotics.bcd.planner;
+package org.inspirerobotics.bcd.planner.curve;
 
 import javafx.geometry.Point2D;
 import org.inspirerobotics.bcd.planner.ui.Gui;
 
+/**
+ * A simulation of a Quadratic Bezier Curve. This simulation
+ * will bump time at every step and then move to the next curve
+ * when time becomes greater than 1.
+ */
 public class Simulation {
 
     private final Gui gui;

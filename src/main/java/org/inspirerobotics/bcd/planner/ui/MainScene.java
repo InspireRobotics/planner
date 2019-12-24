@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.inspirerobotics.bcd.planner.QBezierCurve;
+import org.inspirerobotics.bcd.planner.curve.QBezierCurve;
 
 /**
  * Contains all of the gui components for the planning scene
@@ -18,6 +18,8 @@ public class MainScene {
 
     private final Scene scene;
     private final Gui gui;
+
+    private CurvePane curvePane;
 
     public MainScene(Gui gui) {
         this.gui = gui;
@@ -36,12 +38,12 @@ public class MainScene {
         SplitPane splitPane = new SplitPane();
 
         ToolBar buttonBar = createButtonBar();
-        CurvePane curvePane = new CurvePane(gui);
+        curvePane = new CurvePane(gui);
 
         VBox.setVgrow(curvePane, Priority.ALWAYS);
         VBox vbox = new VBox(curvePane, buttonBar);
-        vbox.setMinWidth(250);
-        vbox.setMaxWidth(450);
+        vbox.setMinWidth(300);
+        vbox.setMaxWidth(500);
         vbox.setStyle("-fx-background-color:gray");
 
         AnchorPane anchorPane = new FieldPane(gui).wrap();
@@ -75,9 +77,18 @@ public class MainScene {
         Button startSimulation = new Button("Start Simulation");
         startSimulation.setOnAction(this::startSimulation);
 
-        bar.getItems().addAll(addCurve, startSimulation);
+        Button findArc = new Button("Find Arc");
+        findArc.setOnAction(this::findArc);
+
+        bar.getItems().addAll(addCurve, startSimulation, findArc);
 
         return bar;
+    }
+
+    private void findArc(ActionEvent actionEvent) {
+        if(curvePane.getCurrentCurve() != null){
+            new ArcLengthWindow(curvePane.getCurrentCurve());
+        }
     }
 
     private void startSimulation(ActionEvent actionEvent) {

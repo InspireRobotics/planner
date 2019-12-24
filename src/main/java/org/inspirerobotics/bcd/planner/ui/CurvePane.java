@@ -11,7 +11,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
-import org.inspirerobotics.bcd.planner.QBezierCurve;
+import org.inspirerobotics.bcd.planner.curve.QBezierCurve;
 
 /**
  * The pane on the right side of the GUI that allows the
@@ -169,6 +169,10 @@ public class CurvePane extends VBox {
         if(choices.getSelectionModel().isEmpty() && choices.getItems().size() > 0){
             choices.getSelectionModel().select(0);
         }
+    }
+
+    public QBezierCurve getCurrentCurve() {
+        return currentCurve;
     }
 }
 class CurveStringConverter extends StringConverter<QBezierCurve>{

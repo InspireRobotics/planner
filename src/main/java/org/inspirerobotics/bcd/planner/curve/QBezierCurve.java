@@ -1,8 +1,14 @@
-package org.inspirerobotics.bcd.planner;
+package org.inspirerobotics.bcd.planner.curve;
 
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 
+/**
+ * Represents a Quadratic Bezier curve where:
+ * <p>P<sub>0</sub> = Starting Point</p>
+ * <p>P<sub>1</sub> = Control Point</p>
+ * <p>P<sub>2</sub> = End Point</p>
+ */
 public class QBezierCurve {
 
     private static int count = 0;

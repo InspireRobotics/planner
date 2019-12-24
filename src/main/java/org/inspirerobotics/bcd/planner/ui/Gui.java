@@ -6,8 +6,8 @@ import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 import org.inspirerobotics.bcd.planner.Images;
 import org.inspirerobotics.bcd.planner.Launcher;
-import org.inspirerobotics.bcd.planner.QBezierCurve;
-import org.inspirerobotics.bcd.planner.Simulation;
+import org.inspirerobotics.bcd.planner.curve.QBezierCurve;
+import org.inspirerobotics.bcd.planner.curve.Simulation;
 
 /**
  * Main class for responsible for creating/handling the GUI

@@ -11,8 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.inspirerobotics.bcd.planner.Images;
-import org.inspirerobotics.bcd.planner.QBezierCurve;
-import org.inspirerobotics.bcd.planner.Simulation;
+import org.inspirerobotics.bcd.planner.curve.QBezierCurve;
+import org.inspirerobotics.bcd.planner.curve.Simulation;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
