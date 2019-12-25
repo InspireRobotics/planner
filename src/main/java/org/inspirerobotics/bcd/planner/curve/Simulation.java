@@ -5,47 +5,63 @@ import org.inspirerobotics.bcd.planner.ui.Gui;
 
 /**
  * A simulation of a Quadratic Bezier Curve. This simulation
- * will bump time at every step and then move to the next curve
- * when time becomes greater than 1.
+ * will move the robot at a constant speed. It also tracks the distance
+ * the robot has travelled and divides that by the total length of the
+ * curve. The length of the curve is calculated using the
+ * {@link IntegrationSolver} class
  */
 public class Simulation {
 
     private final Gui gui;
 
     private boolean running;
-    private double time;
+    private double distance = 0;
     private int currentCurve = 1;
+
+    private long longLongTime;
+    private long lastTimeMs;
 
     public Simulation(Gui gui) {
         this.gui = gui;
 
         this.currentCurve = 0;
-        this.time = 0.0;
+        this.distance = 0.0;
     }
 
     public void start(){
         running = true;
-        time = 0.0;
+        distance = 0.0;
         currentCurve = 1;
+        lastTimeMs = System.currentTimeMillis();
+        longLongTime = System.currentTimeMillis();
     }
 
     public void tick(long timerTimeNano){
         if(!running)
             return;
 
-        time += .006;
+        double deltaTime = (System.currentTimeMillis() - lastTimeMs) / 1000.0;
+        double robotSpeedFeetPerSec = 5;
+        double velocity = robotSpeedFeetPerSec * deltaTime;
+        double xVel = Math.sin(getAngle()) * velocity;
+        double yVel = Math.cos(getAngle()) * velocity;
+        distance += Math.sqrt(Math.pow(xVel, 2) + Math.pow(yVel, 2));
 
-        if(time > 1.0){
+        if(getTime() > 1.0){
             gotoNextCurve();
         }
+
+        lastTimeMs = System.currentTimeMillis();
     }
 
     private void gotoNextCurve() {
         currentCurve++;
-        time = 0.0;
+        distance = 0.0;
+        lastTimeMs = System.currentTimeMillis();
 
         if(retrieveCurve() == null){
             running = false;
+            System.out.println(((System.currentTimeMillis() - longLongTime)));
         }
     }
 
@@ -61,10 +77,14 @@ public class Simulation {
         return new Point2D(x, y);
     }
 
-    private double calc(double p0, double p1, double p2){
-        double iTime = 1 - time;
+    public double getTime(){
+        return distance / new IntegrationSolver().solve(retrieveCurve());
+    }
 
-        return (Math.pow(iTime, 2) * p0) + (2 * iTime * time * p1)  + (Math.pow(time, 2) * p2);
+    private double calc(double p0, double p1, double p2){
+        double iTime = 1 -  getTime();
+
+        return (Math.pow(iTime, 2) * p0) + (2 * iTime * getTime() * p1)  + (Math.pow(getTime(), 2) * p2);
     }
 
     private QBezierCurve retrieveCurve() {
@@ -73,7 +93,7 @@ public class Simulation {
     }
 
     private double calcDerivative(double p0, double p1, double p2){
-        return (2 * (1 - time) * (p1 - p0)) + (2 * time * (p2 - p1));
+        return (2 * (1 -  getTime()) * (p1 - p0)) + (2 * getTime() * (p2 - p1));
     }
 
     public double getAngle(){
@@ -86,10 +106,6 @@ public class Simulation {
 
     public boolean isRunning() {
         return running;
-    }
-
-    public double getTime() {
-        return time;
     }
 
     public int getCurrentCurve() {
