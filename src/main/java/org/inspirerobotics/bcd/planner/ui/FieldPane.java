@@ -148,8 +148,26 @@ public class FieldPane extends Canvas{
         if(!simulation.isRunning())
             return;
 
-        drawPoint(g, pointToPixel(simulation.getCurrentPoint()), Color.SPRINGGREEN);
+        drawRobot(g, pointToPixel(simulation.getCurrentPoint()), simulation.getAngle());
         drawSimulationInfo(g, simulation);
+    }
+
+    private void drawRobot(GraphicsContext g, Point2D point, double angle) {
+        g.save();
+
+        //Translate so that the rotation is on the center of the rectangle
+        g.translate(point.getX(), point.getY());
+        g.rotate(angle * 180 / Math.PI);
+        g.translate(-point.getX(), -point.getY());
+
+
+        double width = 50;
+        double height = 25;
+
+        g.setFill(Color.YELLOW);
+        g.fillRect(point.getX() - (width / 2), point.getY() - (height / 2), width, height);
+
+        g.restore();
     }
 
 
@@ -163,14 +181,16 @@ public class FieldPane extends Canvas{
         String time = String.format("Time: %1.2f", simulation.getTime());
 
         g.setFill(Color.BLACK);
-        g.fillRect(0, getHeight() - 62, 102, 60);
+        g.fillRect(0, getHeight() - 82, 152, 84);
         g.setFill(Color.LIGHTGRAY);
-        g.fillRect(0, getHeight() - 60, 100, 60);
+        g.fillRect(0, getHeight() - 80, 150, 80);
 
         g.setFill(Color.BLACK);
         g.setFont(Font.font(18));
+        String angle = String.format("%2.2f", -simulation.getAngle() * 180 / Math.PI);
+        g.fillText("Angle: " + angle, 5, getHeight() - 10);
         g.fillText(time, 5, getHeight() - 35);
-        g.fillText("Curve: " + simulation.getCurrentCurve(), 5, getHeight() - 15);
+        g.fillText("Curve: " + simulation.getCurrentCurve(), 5, getHeight() - 60);
 
         g.restore();
     }

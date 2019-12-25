@@ -72,6 +72,18 @@ public class Simulation {
                 .orElse(null);
     }
 
+    private double calcDerivative(double p0, double p1, double p2){
+        return (2 * (1 - time) * (p1 - p0)) + (2 * time * (p2 - p1));
+    }
+
+    public double getAngle(){
+        QBezierCurve curve = retrieveCurve();
+        double velX = calcDerivative(curve.getStart().getX(), curve.getControlPoint().getX(), curve.getEnd().getX());
+        double velY = calcDerivative(curve.getStart().getY(), curve.getControlPoint().getY(), curve.getEnd().getY());
+
+        return Math.atan2(velY, velX);
+    }
+
     public boolean isRunning() {
         return running;
     }
