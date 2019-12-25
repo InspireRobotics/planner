@@ -54,14 +54,14 @@ public class Gui {
 
     private void addTestCurves() {
         QBezierCurve testCurve = new QBezierCurve();
-        testCurve.setStart(new Point2D(25, 100));
-        testCurve.setControlPoint(new Point2D(300, 75));
-        testCurve.setEnd(new Point2D(300, 400));
+        testCurve.setStart(new Point2D(1.2, 5));
+        testCurve.setControlPoint(new Point2D(12, 5));
+        testCurve.setEnd(new Point2D(12, 12));
 
         QBezierCurve testCurve2 = new QBezierCurve();
-        testCurve2.setStart(new Point2D(300, 400));
-        testCurve2.setControlPoint(new Point2D(300, 540));
-        testCurve2.setEnd(new Point2D(370, 570));
+        testCurve2.setStart(new Point2D(12, 12));
+        testCurve2.setControlPoint(new Point2D(12, 23));
+        testCurve2.setEnd(new Point2D(18, 26.5));
 
         curves.add(testCurve);
         curves.add(testCurve2);

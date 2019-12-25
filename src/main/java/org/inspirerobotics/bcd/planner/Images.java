@@ -10,6 +10,8 @@ import java.io.IOException;
  */
 public class Images {
 
+    public static final double PIXELS_PER_FOOT = 21.49;
+
     private static Image fieldImage;
     private static Image icon;
     private static Image aboutLogo;

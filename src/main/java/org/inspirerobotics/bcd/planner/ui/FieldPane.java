@@ -20,6 +20,11 @@ import java.util.LinkedHashSet;
 
 /**
  * The Main component of the GUI - it draws the curves and the picture of the field
+ *
+ * Note: This canvas is in pixels, so when drawing,
+ * all points must be converted from feet to pixels.
+ *
+ * Unit Constant: {@link Images#PIXELS_PER_FOOT}
  */
 public class FieldPane extends Canvas{
 
@@ -47,7 +52,7 @@ public class FieldPane extends Canvas{
     }
 
     private void onDrag(MouseEvent mouseEvent) {
-        int clickRadius = 25;
+        double clickRadius = 1.5;//Note: This is feet because the click gets converted into feet later
 
         Point2D click = new Point2D(mouseEvent.getX(), mouseEvent.getY());
         try {
@@ -55,6 +60,8 @@ public class FieldPane extends Canvas{
         } catch(NonInvertibleTransformException e) {
             e.printStackTrace();
         }
+
+        click = click.multiply(1.0 / Images.PIXELS_PER_FOOT);
 
         for(QBezierCurve curve : gui.getCurves()){
             if(curve.getStart().distance(click) < clickRadius){
@@ -141,7 +148,7 @@ public class FieldPane extends Canvas{
         if(!simulation.isRunning())
             return;
 
-        drawPoint(g, simulation.getCurrentPoint(), Color.SPRINGGREEN);
+        drawPoint(g, pointToPixel(simulation.getCurrentPoint()), Color.SPRINGGREEN);
         drawSimulationInfo(g, simulation);
     }
 
@@ -171,10 +178,14 @@ public class FieldPane extends Canvas{
     private void drawCurves(GraphicsContext g) {
         gui.getCurves().forEach(curve -> {
             drawCurve(g, curve);
-            drawPoint(g, curve.getStart(), curve.getColor());
-            drawPoint(g, curve.getControlPoint(), curve.getColor());
-            drawPoint(g, curve.getEnd(), curve.getColor());
+            drawPoint(g, pointToPixel(curve.getStart()), curve.getColor());
+            drawPoint(g, pointToPixel(curve.getControlPoint()), curve.getColor());
+            drawPoint(g, pointToPixel(curve.getEnd()), curve.getColor());
         });
+    }
+
+    private Point2D pointToPixel(Point2D point){
+        return point.multiply(Images.PIXELS_PER_FOOT);
     }
 
     private void drawPoint(GraphicsContext g, Point2D point, Color color) {
@@ -186,9 +197,9 @@ public class FieldPane extends Canvas{
     }
 
     private void drawCurve(GraphicsContext g, QBezierCurve curve) {
-        Point2D start = curve.getStart();
-        Point2D control = curve.getControlPoint();
-        Point2D end = curve.getEnd();
+        Point2D start = pointToPixel(curve.getStart());
+        Point2D control = pointToPixel(curve.getControlPoint());
+        Point2D end = pointToPixel(curve.getEnd());
 
         g.setLineWidth(4);
         g.setStroke(curve.getColor());
