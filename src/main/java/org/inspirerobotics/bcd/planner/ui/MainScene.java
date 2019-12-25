@@ -100,6 +100,10 @@ public class MainScene {
         gui.getCurves().stream().map(QBezierCurve::getStart).forEach(System.out::println);
     }
 
+    public CurvePane getCurvePane() {
+        return curvePane;
+    }
+
     public Scene getScene() {
         return scene;
     }

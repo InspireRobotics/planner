@@ -10,6 +10,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.transform.NonInvertibleTransformException;
 import org.inspirerobotics.bcd.planner.Images;
 import org.inspirerobotics.bcd.planner.curve.QBezierCurve;
 import org.inspirerobotics.bcd.planner.curve.Simulation;
@@ -40,7 +41,40 @@ public class FieldPane extends Canvas{
         this.setOnKeyReleased(this::onKeyReleased);
         this.setOnMouseClicked(this::onClick);
 
+        this.setOnMouseDragged(this::onDrag);
+
         GuiUtils.createTimer(this::animate).start();
+    }
+
+    private void onDrag(MouseEvent mouseEvent) {
+        int clickRadius = 25;
+
+        Point2D click = new Point2D(mouseEvent.getX(), mouseEvent.getY());
+        try {
+            click = getGraphicsContext2D().getTransform().inverseTransform(click);
+        } catch(NonInvertibleTransformException e) {
+            e.printStackTrace();
+        }
+
+        for(QBezierCurve curve : gui.getCurves()){
+            if(curve.getStart().distance(click) < clickRadius){
+                curve.setStart(click);
+                gui.getScene().getCurvePane().syncCurveBoxes();
+                return;
+            }
+
+            if(curve.getControlPoint().distance(click) < clickRadius){
+                curve.setControlPoint(click);
+                gui.getScene().getCurvePane().syncCurveBoxes();
+                return;
+            }
+
+            if(curve.getEnd().distance(click) < clickRadius){
+                curve.setEnd(click);
+                gui.getScene().getCurvePane().syncCurveBoxes();
+                return;
+            }
+        }
     }
 
     private void onClick(MouseEvent mouseEvent) {

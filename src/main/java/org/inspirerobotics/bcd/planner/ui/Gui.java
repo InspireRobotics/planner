@@ -1,5 +1,6 @@
 package org.inspirerobotics.bcd.planner.ui;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -41,6 +42,7 @@ public class Gui {
         stage.setTitle("BCD Planner: " + Launcher.VERSION);
         stage.setResizable(true);
         stage.getIcons().add(Images.getIcon());
+        stage.setOnCloseRequest(event -> Platform.exit());
 
         stage.setWidth(900);
         stage.setHeight(650);
@@ -63,6 +65,10 @@ public class Gui {
 
         curves.add(testCurve);
         curves.add(testCurve2);
+    }
+
+    public MainScene getScene() {
+        return scene;
     }
 
     public Simulation getSimulation() {

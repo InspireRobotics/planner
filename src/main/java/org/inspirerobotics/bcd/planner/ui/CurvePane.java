@@ -67,15 +67,15 @@ public class CurvePane extends VBox {
         syncCurveBoxes();
     }
 
-    private void syncCurveBoxes() {
+    void syncCurveBoxes() {
         if(currentCurve != null){
             updating = true;
-            p0x.setText(Double.toString(currentCurve.getStart().getX()));
-            p0y.setText(Double.toString(currentCurve.getStart().getY()));
-            p1x.setText(Double.toString(currentCurve.getControlPoint().getX()));
-            p1y.setText(Double.toString(currentCurve.getControlPoint().getY()));
-            p2x.setText(Double.toString(currentCurve.getEnd().getX()));
-            p2y.setText(Double.toString(currentCurve.getEnd().getY()));
+            p0x.setText(doubleToShortString(currentCurve.getStart().getX()));
+            p0y.setText(doubleToShortString(currentCurve.getStart().getY()));
+            p1x.setText(doubleToShortString(currentCurve.getControlPoint().getX()));
+            p1y.setText(doubleToShortString(currentCurve.getControlPoint().getY()));
+            p2x.setText(doubleToShortString(currentCurve.getEnd().getX()));
+            p2y.setText(doubleToShortString(currentCurve.getEnd().getY()));
             colorPicker.setValue(currentCurve.getColor());
             colorPicker.setEditable(true);
 
@@ -92,6 +92,10 @@ public class CurvePane extends VBox {
             colorPicker.setValue(Color.WHITE);
             colorPicker.setEditable(false);
         }
+    }
+
+    private String doubleToShortString(double number){
+        return String.format("%4.2f", number);
     }
 
     private void addCurveBoxes() {
@@ -149,11 +153,16 @@ public class CurvePane extends VBox {
     private TextFormatter.Change formatNumberTextField(TextFormatter.Change change) {
         String newText = change.getControlNewText();
 
+        //Allows for user to type a . without the regex going insane
+        if(newText.endsWith("."))
+            newText = newText.concat("0");
+
         if(newText.isEmpty()){
             return change;
         }
 
-        if (newText.matches("^[0-9]\\d*(\\.\\d+)?$") && currentCurve != null) {
+        if (newText.matches("^(-?[1-9]+\\d*([.]\\d+)?)$|^(-?0[.]\\d*[1-9]+)$|^0$|^0.0$|$[.]")
+                && currentCurve != null) {
             return change;
         }
 
