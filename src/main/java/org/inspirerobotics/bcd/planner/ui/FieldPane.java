@@ -148,7 +148,9 @@ public class FieldPane extends Canvas{
         if(!simulation.isRunning())
             return;
 
-        drawRobot(g, pointToPixel(simulation.getCurrentPoint()), simulation.getAngle());
+        drawRobot(g, pointToPixel(simulation.getRobotPos()), simulation.getAngle());
+        drawPoint(g, pointToPixel(simulation.getRobotPos()), Color.SPRINGGREEN);
+        drawPoint(g, pointToPixel(simulation.getCurrentPoint()), Color.BLUE);
         drawSimulationInfo(g, simulation);
     }
 
