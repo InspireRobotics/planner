@@ -45,7 +45,7 @@ public class Gui {
         stage.setOnCloseRequest(event -> Platform.exit());
 
         stage.setWidth(900);
-        stage.setHeight(650);
+        stage.setHeight(700);
     }
 
     public void stop() {

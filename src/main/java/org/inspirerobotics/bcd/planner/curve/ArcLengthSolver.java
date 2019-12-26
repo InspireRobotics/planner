@@ -21,7 +21,7 @@ public interface ArcLengthSolver {
         }
     }
 
-    static Point2D calc(QBezierCurve curve, double time){
+    public static Point2D calc(QBezierCurve curve, double time){
         double x = calc(time, curve.getStart().getX(), curve.getControlPoint().getX(), curve.getEnd().getX());
         double y = calc(time, curve.getStart().getY(), curve.getControlPoint().getY(), curve.getEnd().getY());
 

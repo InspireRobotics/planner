@@ -145,12 +145,15 @@ public class FieldPane extends Canvas{
     }
 
     private void drawSimulation(GraphicsContext g, Simulation simulation) {
-        if(!simulation.isRunning())
+        if(simulation == null || simulation.getRobotPos() == null)
             return;
 
-        drawRobot(g, pointToPixel(simulation.getRobotPos()), simulation.getAngle());
-        drawPoint(g, pointToPixel(simulation.getRobotPos()), Color.SPRINGGREEN);
-        drawPoint(g, pointToPixel(simulation.getCurrentPoint()), Color.BLUE);
+        if(simulation.isRunning()){
+            drawRobot(g, pointToPixel(simulation.getRobotPos()), simulation.getAngle());
+            drawPoint(g, pointToPixel(simulation.getRobotPos()), Color.SPRINGGREEN);
+            drawPoint(g, pointToPixel(simulation.getCurrentPoint()), Color.BLUE);
+        }
+
         drawSimulationInfo(g, simulation);
     }
 
@@ -180,7 +183,6 @@ public class FieldPane extends Canvas{
         //to keep this always in lower left hand corner
         g.setTransform(1, 0, 0, 1, 0, 0);
 
-        String time = String.format("Time: %1.2f", simulation.getTime());
 
         g.setFill(Color.BLACK);
         g.fillRect(0, getHeight() - 82, 152, 84);
@@ -189,9 +191,13 @@ public class FieldPane extends Canvas{
 
         g.setFill(Color.BLACK);
         g.setFont(Font.font(18));
-        String angle = String.format("%2.2f", -simulation.getAngle() * 180 / Math.PI);
-        g.fillText("Angle: " + angle, 5, getHeight() - 10);
-        g.fillText(time, 5, getHeight() - 35);
+
+        String angle = simulation.isRunning() ?
+                String.format("Angle: %2.2f", -simulation.getAngle() * 180 / Math.PI) : "";
+        String totalTime = String.format("Time: %2.2fs", simulation.getTimeRan() / 1000.0);
+
+        g.fillText(angle, 5, getHeight() - 10);
+        g.fillText(totalTime, 5, getHeight() - 35);
         g.fillText("Curve: " + simulation.getCurrentCurve(), 5, getHeight() - 60);
 
         g.restore();

@@ -4,11 +4,8 @@ import javafx.geometry.Point2D;
 import org.inspirerobotics.bcd.planner.ui.Gui;
 
 /**
- * A simulation of a Quadratic Bezier Curve. This simulation
- * will move the robot at a constant speed. It also tracks the distance
- * the robot has travelled and divides that by the total length of the
- * curve. The length of the curve is calculated using the
- * {@link IntegrationSolver} class
+ * A simulation of a Quadratic Bezier Curve. It tracks the distance
+ * the robot has travelled and then finds the time by iterating until the distance is found.
  */
 public class Simulation {
 
@@ -17,9 +14,11 @@ public class Simulation {
     private boolean running;
     private double distance = 0;
     private int currentCurve = 1;
+    private double currentBezierTime;
 
     private Point2D robotPos;
 
+    private long timeRan;
     private long lastTimeMs;
 
     public Simulation(Gui gui) {
@@ -33,6 +32,8 @@ public class Simulation {
         running = true;
         distance = 0.0;
         currentCurve = 1;
+        timeRan = 0;
+        currentBezierTime = 0;
         lastTimeMs = System.currentTimeMillis();
 
         robotPos = getCurrentPoint();
@@ -42,9 +43,7 @@ public class Simulation {
         if(!running)
             return;
 
-        double deltaTime = (System.currentTimeMillis() - lastTimeMs) / 1000.0;
-        double robotSpeedFeetPerSec = 1;
-        double deltaPos = robotSpeedFeetPerSec * deltaTime;
+        double deltaPos = getDeltaPosition();
         double angle = getAngle();
 
         double deltaX = Math.cos(angle) * deltaPos;
@@ -52,14 +51,20 @@ public class Simulation {
 
         distance += Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
         robotPos = robotPos.add(deltaX, deltaY);
-
-        System.out.printf("Drive: speed=%f   theta=%f   d=%f\n", robotSpeedFeetPerSec, angle, distance);
+        currentBezierTime = calcTimeAtDistance(distance);
 
         if(getTime() > 1.0){
             gotoNextCurve();
         }
 
+        timeRan += System.currentTimeMillis() - lastTimeMs;
         lastTimeMs = System.currentTimeMillis();
+    }
+
+    private double getDeltaPosition() {
+        double deltaTime = (System.currentTimeMillis() - lastTimeMs) / 1000.0;
+        double robotSpeedFeetPerSec = 5;
+        return robotSpeedFeetPerSec * deltaTime;
     }
 
     private void gotoNextCurve() {
@@ -70,7 +75,6 @@ public class Simulation {
         if(retrieveCurve() == null){
             running = false;
         }
-        System.out.println("new curve");
     }
 
     public Point2D getCurrentPoint(){
@@ -86,12 +90,26 @@ public class Simulation {
         return new Point2D(x, y);
     }
 
-    private double getTime(double distance){
-        return distance / new BruteForceArcSolver(.001).solve(retrieveCurve());
-    }
+    private double calcTimeAtDistance(double targetDistance){
+        QBezierCurve curve = retrieveCurve();
 
-    public double getTime(){
-        return getTime(distance);
+        Point2D prev = ArcLengthSolver.calc(curve, 0.0);
+        double currDistance = 0;
+        double dt = .001;
+
+        for(double t = 0; t < 1; t += dt){
+            Point2D curr = ArcLengthSolver.calc(curve, t);
+
+            currDistance += curr.distance(prev);
+
+            if(currDistance >= targetDistance){
+                return t;
+            }
+
+            prev = curr;
+        }
+
+        return currDistance;
     }
 
     private double calc(double p0, double p1, double p2, double time){
@@ -117,10 +135,17 @@ public class Simulation {
     }
 
     public double getAngle(){
+        if(retrieveCurve() == null)
+            return Double.NaN;
+
         QBezierCurve curve = retrieveCurve();
         double time = getTime();
 
         return calcAngle(curve, time);
+    }
+
+    public double getTime(){
+        return currentBezierTime;
     }
 
     public boolean isRunning() {
@@ -131,16 +156,11 @@ public class Simulation {
         return currentCurve;
     }
 
-
-    public double getDistance() {
-        return distance;
+    public long getTimeRan() {
+        return timeRan;
     }
 
     public Point2D getRobotPos() {
         return robotPos;
-    }
-
-    public Gui getGui() {
-        return gui;
     }
 }
