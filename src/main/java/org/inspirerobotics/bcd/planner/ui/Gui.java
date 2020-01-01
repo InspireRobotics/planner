@@ -7,8 +7,12 @@ import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 import org.inspirerobotics.bcd.planner.Images;
 import org.inspirerobotics.bcd.planner.Launcher;
+import org.inspirerobotics.bcd.planner.curve.CurvesIO;
 import org.inspirerobotics.bcd.planner.curve.QBezierCurve;
 import org.inspirerobotics.bcd.planner.curve.Simulation;
+
+import java.io.File;
+import java.util.stream.Collectors;
 
 /**
  * Main class for responsible for creating/handling the GUI
@@ -67,12 +71,33 @@ public class Gui {
         curves.add(testCurve2);
     }
 
+    public void save(File file) {
+        if(file == null)
+            return;
+
+        var clonedCurves = curves.stream().map(QBezierCurve::copy).collect(Collectors.toList());
+
+        new Thread(() -> CurvesIO.save(file, clonedCurves)).start();
+
+    }
+
+    public void open(File file) {
+        if(file == null)
+            return;
+
+        new Thread(() -> CurvesIO.open(file, this)).start();
+    }
+
     public MainScene getScene() {
         return scene;
     }
 
     public Simulation getSimulation() {
         return simulation;
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 
     public ObservableList<QBezierCurve> getCurves() {

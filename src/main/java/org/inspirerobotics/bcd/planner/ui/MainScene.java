@@ -9,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import org.inspirerobotics.bcd.planner.curve.QBezierCurve;
 
 /**
@@ -55,16 +56,48 @@ public class MainScene {
 
     private MenuBar createMenuBar() {
         MenuBar menuBar = new MenuBar();
-        Menu optionsMenu = new Menu("Options");
+        Menu optionsMenu = new Menu("File");
+
+        MenuItem new_ = new MenuItem("New");
+        new_.setOnAction(event -> gui.getCurves().setAll(new QBezierCurve()));
+
+        MenuItem open = new MenuItem("Open");
+        open.setOnAction(this::openFile);
+
+        MenuItem saveAs = new MenuItem("Save As");
+        saveAs.setOnAction(this::saveAs);
 
         MenuItem about = new MenuItem("About");
         about.setOnAction(event-> new AboutWindow());
+
         MenuItem quit = new MenuItem("Quit");
         quit.setOnAction(event -> Platform.exit());
 
-        optionsMenu.getItems().addAll(about, quit);
+        optionsMenu.getItems().addAll(new_, open, saveAs, about, quit);
         menuBar.getMenus().add(optionsMenu);
         return menuBar;
+    }
+
+    private void openFile(ActionEvent actionEvent) {
+        var extensionFilter = new FileChooser.ExtensionFilter("BCD Save File", "*.json");
+        FileChooser fileChooser = new FileChooser();
+
+        fileChooser.setTitle("BCD: Open");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+        fileChooser.setInitialFileName("save.json");
+
+        gui.open(fileChooser.showOpenDialog(gui.getStage()));
+    }
+
+    private void saveAs(ActionEvent actionEvent) {
+        var extensionFilter = new FileChooser.ExtensionFilter("BCD Save File", "*.json");
+        FileChooser fileChooser = new FileChooser();
+
+        fileChooser.setTitle("BCD: Save As");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+        fileChooser.setInitialFileName("save.json");
+
+        gui.save(fileChooser.showSaveDialog(gui.getStage()));
     }
 
     private ToolBar createButtonBar() {

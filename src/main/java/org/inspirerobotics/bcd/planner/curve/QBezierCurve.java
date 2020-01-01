@@ -13,11 +13,34 @@ public class QBezierCurve {
 
     private static int count = 0;
 
-    private final String name = "Curve" + (++count);
+    private final String name;
     private Color color = Color.RED;
     private Point2D start = new Point2D(0, 0);
     private Point2D end = new Point2D(0, 0);
     private Point2D controlPoint = new Point2D(0, 0);
+
+    public QBezierCurve() {
+        this("Curve" + (++count));
+    }
+
+    public QBezierCurve(String name) {
+        this.name = name;
+    }
+
+    public QBezierCurve copy() {
+        QBezierCurve curve = new QBezierCurve(name);
+
+        curve.setStart(copyPoint(start));
+        curve.setControlPoint(copyPoint(controlPoint));
+        curve.setEnd(copyPoint(end));
+        curve.setColor(Color.color(color.getRed(), color.getGreen(), color.getBlue()));
+
+        return curve;
+    }
+
+    private Point2D copyPoint(Point2D point) {
+        return new Point2D(point.getX(), point.getY());
+    }
 
     public void setColor(Color color) {
         this.color = color;

@@ -13,7 +13,7 @@ public class Simulation {
 
     private boolean running;
     private double distance = 0;
-    private int currentCurve = 1;
+    private int currentCurve = 0;
     private double currentBezierTime;
 
     private Point2D robotPos;
@@ -31,7 +31,7 @@ public class Simulation {
     public void start(){
         running = true;
         distance = 0.0;
-        currentCurve = 1;
+        currentCurve = 0;
         timeRan = 0;
         currentBezierTime = 0;
         lastTimeMs = System.currentTimeMillis();
@@ -119,8 +119,9 @@ public class Simulation {
     }
 
     private QBezierCurve retrieveCurve() {
-        return gui.getCurves().stream().filter(curve -> curve.getName().equals("Curve" + currentCurve)).findAny()
-                .orElse(null);
+        if(currentCurve >= gui.getCurves().size())
+            return null;
+        return gui.getCurves().get(currentCurve);
     }
 
     private double calcDerivative(double p0, double p1, double p2, double time){
