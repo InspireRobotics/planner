@@ -27,6 +27,10 @@ public class QBezierCurve {
         this.name = name;
     }
 
+    public static void resetCount() {
+        count = 0;
+    }
+
     public QBezierCurve copy() {
         QBezierCurve curve = new QBezierCurve(name);
 

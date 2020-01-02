@@ -16,6 +16,7 @@ public class Launcher extends Application {
 
     public static final String VERSION = "0.1.0";
     private Gui gui;
+    private boolean error = false;
 
     public static void main(String[] args) {
         launch(args);
@@ -26,16 +27,27 @@ public class Launcher extends Application {
         try {
             Images.load();
         } catch(IOException e) {
-            System.out.println("Failed to load field image!");
-            e.printStackTrace();
+            this.error = true;
+            String error = "Failed to load field image!";
+            System.out.println(error);
 
-            Platform.exit();
+            Gui.showError(error, e, Platform::exit);
         }
     }
 
     @Override
     public void start(Stage stage) {
-        gui = new Gui(stage);
+        if(error)
+            return;
+
+        Thread.setDefaultUncaughtExceptionHandler((t, exception) ->
+                Gui.showError("Unexpected Error", new RuntimeException(exception)));
+
+        try{
+            gui = new Gui(stage);
+        }catch(Exception e){
+            Gui.showError("Failed to create gui!", e, Platform::exit);
+        }
     }
 
     @Override

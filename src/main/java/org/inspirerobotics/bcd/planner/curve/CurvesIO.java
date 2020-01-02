@@ -27,9 +27,8 @@ public class CurvesIO {
 
             List<QBezierCurve> curves = parseCurves(data);
             Platform.runLater(() -> gui.getCurves().setAll(curves));
-        } catch(IOException e) {
-            System.out.println("Error while reading from " + file.getAbsolutePath());
-
+        } catch(IOException | RuntimeException e) {
+            Gui.showError("Failed to open the file!", e);
             e.printStackTrace();
         }
     }
@@ -70,10 +69,9 @@ public class CurvesIO {
     public static void save(File file, List<QBezierCurve> curves){
         try {
             Files.write(file.toPath(), generateJSON(curves).getBytes());
-        } catch(IOException e) {
-            System.out.println("Error while writing to " + file.getAbsolutePath());
-
+        } catch(IOException | RuntimeException e) {
             e.printStackTrace();
+            Gui.showError("Failed to save the file!", e);
         }
     }
 

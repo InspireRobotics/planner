@@ -55,17 +55,16 @@ public class MainScene {
     }
 
     private MenuBar createMenuBar() {
-        MenuBar menuBar = new MenuBar();
-        Menu optionsMenu = new Menu("File");
+        var menuBar = new MenuBar();
+        var fileMenu = createFileMenu();
+        var aboutMenu = createAboutMenu();
 
-        MenuItem new_ = new MenuItem("New");
-        new_.setOnAction(event -> gui.getCurves().setAll(new QBezierCurve()));
+        menuBar.getMenus().addAll(fileMenu, aboutMenu);
+        return menuBar;
+    }
 
-        MenuItem open = new MenuItem("Open");
-        open.setOnAction(this::openFile);
-
-        MenuItem saveAs = new MenuItem("Save As");
-        saveAs.setOnAction(this::saveAs);
+    private Menu createAboutMenu() {
+        Menu menu = new Menu("About");
 
         MenuItem about = new MenuItem("About");
         about.setOnAction(event-> new AboutWindow());
@@ -73,9 +72,37 @@ public class MainScene {
         MenuItem quit = new MenuItem("Quit");
         quit.setOnAction(event -> Platform.exit());
 
-        optionsMenu.getItems().addAll(new_, open, saveAs, about, quit);
-        menuBar.getMenus().add(optionsMenu);
-        return menuBar;
+        menu.getItems().addAll(about, quit);
+        return menu;
+    }
+
+    private Menu createFileMenu() {
+        Menu menu = new Menu("File");
+
+        MenuItem new_ = new MenuItem("New");
+        new_.setOnAction(event -> gui.startNewProject());
+
+        MenuItem open = new MenuItem("Open");
+        open.setOnAction(this::openFile);
+
+        MenuItem save = new MenuItem("Save");
+        save.setOnAction(this::save);
+
+        MenuItem saveAs = new MenuItem("Save As");
+        saveAs.setOnAction(this::saveAs);
+
+        menu.getItems().addAll(new_, open, save, saveAs);
+
+        return menu;
+    }
+
+    private void save(ActionEvent actionEvent) {
+        if(gui.getCurrentFile() == null){
+            saveAs(actionEvent);
+            return;
+        }
+
+        gui.save(gui.getCurrentFile());
     }
 
     private void openFile(ActionEvent actionEvent) {
@@ -107,15 +134,29 @@ public class MainScene {
         Button addCurve = new Button("Add Curve");
         addCurve.setOnAction(this::addCurve);
 
+        Button removeCurve = new Button("Remove Curve");
+        removeCurve.setOnAction(this::removeCurve);
+
         Button startSimulation = new Button("Start Simulation");
         startSimulation.setOnAction(this::startSimulation);
 
         Button findArc = new Button("Find Arc");
         findArc.setOnAction(this::findArc);
 
-        bar.getItems().addAll(addCurve, startSimulation, findArc);
+        bar.getItems().addAll(addCurve, removeCurve, startSimulation, findArc);
 
         return bar;
+    }
+
+    private void removeCurve(ActionEvent actionEvent) {
+        String context = "Would you like to delete " + curvePane.getCurrentCurve().getName() + "?";
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, context, ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Delete?");
+        alert.showAndWait();
+
+        if(alert.getResult() == ButtonType.YES){
+            gui.getCurves().remove(curvePane.getCurrentCurve());
+        }
     }
 
     private void findArc(ActionEvent actionEvent) {
@@ -129,7 +170,7 @@ public class MainScene {
     }
 
     private void addCurve(ActionEvent actionEvent) {
-        gui.getCurves().add(new QBezierCurve());
+        gui.getCurves().add(gui.createDefaultCurve());
         gui.getCurves().stream().map(QBezierCurve::getStart).forEach(System.out::println);
     }
 
