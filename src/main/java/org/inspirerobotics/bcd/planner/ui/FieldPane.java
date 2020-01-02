@@ -17,6 +17,7 @@ import org.inspirerobotics.bcd.planner.curve.Simulation;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.function.Consumer;
 
 /**
  * The Main component of the GUI - it draws the curves and the picture of the field
@@ -63,24 +64,29 @@ public class FieldPane extends Canvas{
 
         click = click.multiply(1.0 / Images.PIXELS_PER_FOOT);
 
+        double maxDistance = clickRadius;
+        Consumer<Point2D> draggedPoint = null;
+
         for(QBezierCurve curve : gui.getCurves()){
-            if(curve.getStart().distance(click) < clickRadius){
-                curve.setStart(click);
-                gui.getScene().getCurvePane().syncCurveBoxes();
-                return;
+            if(curve.getStart().distance(click) < maxDistance){
+                maxDistance = curve.getStart().distance(click);
+                draggedPoint = curve::setStart;
             }
 
-            if(curve.getControlPoint().distance(click) < clickRadius){
-                curve.setControlPoint(click);
-                gui.getScene().getCurvePane().syncCurveBoxes();
-                return;
+            if(curve.getControlPoint().distance(click) < maxDistance){
+                maxDistance = curve.getControlPoint().distance(click);
+                draggedPoint = curve::setControlPoint;
             }
 
-            if(curve.getEnd().distance(click) < clickRadius){
-                curve.setEnd(click);
-                gui.getScene().getCurvePane().syncCurveBoxes();
-                return;
+            if(curve.getEnd().distance(click) < maxDistance){
+                maxDistance = curve.getEnd().distance(click);
+                draggedPoint = curve::setEnd;
             }
+        }
+
+        if(draggedPoint != null){
+            draggedPoint.accept(click);
+            gui.getScene().getCurvePane().syncCurveBoxes();
         }
     }
 
