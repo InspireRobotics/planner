@@ -113,6 +113,8 @@ public class FieldPane extends Canvas{
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        if(keyEvent.isShiftDown() || keyEvent.isControlDown())
+            return;
         keysDown.add(keyEvent.getCode());
     }
 

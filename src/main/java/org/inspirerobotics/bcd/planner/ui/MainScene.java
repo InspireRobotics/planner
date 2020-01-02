@@ -5,6 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
@@ -33,6 +35,36 @@ public class MainScene {
         borderPane.setCenter(splitPane);
 
         this.scene = new Scene(borderPane);
+        this.scene.setOnKeyPressed(this::onKeyPressed);
+    }
+
+    private void onKeyPressed(KeyEvent keyEvent) {
+        if(!keyEvent.isControlDown()){
+           return;
+        }
+
+        if(keyEvent.getCode() == KeyCode.S){
+            if(keyEvent.isShiftDown()){
+                saveAs(null);
+            }else{
+                save(null);
+            }
+        }else if(keyEvent.getCode() == KeyCode.N){
+            showNewProjectDialog();
+        }else if(keyEvent.getCode() == KeyCode.O){
+            openFile(null);
+        }
+    }
+
+    private void showNewProjectDialog() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Would you like to start a new Project?");
+        alert.setHeaderText("Would you like to start a new Project?");
+        alert.showAndWait();
+
+        if(alert.getResult() == ButtonType.YES){
+            gui.startNewProject();
+        }
     }
 
     private SplitPane createCenterPane(Gui gui) {
@@ -79,16 +111,16 @@ public class MainScene {
     private Menu createFileMenu() {
         Menu menu = new Menu("File");
 
-        MenuItem new_ = new MenuItem("New");
-        new_.setOnAction(event -> gui.startNewProject());
+        MenuItem new_ = new MenuItem("New (Ctrl-N)");
+        new_.setOnAction(event -> showNewProjectDialog());
 
-        MenuItem open = new MenuItem("Open");
+        MenuItem open = new MenuItem("Open (Ctrl-O)");
         open.setOnAction(this::openFile);
 
-        MenuItem save = new MenuItem("Save");
+        MenuItem save = new MenuItem("Save (Ctrl-S)");
         save.setOnAction(this::save);
 
-        MenuItem saveAs = new MenuItem("Save As");
+        MenuItem saveAs = new MenuItem("Save As (Ctrl-Shift-S)");
         saveAs.setOnAction(this::saveAs);
 
         menu.getItems().addAll(new_, open, save, saveAs);
